@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+@theme {
+  /* One typeface for display + body (Inter, system fallback), mono for code/labels/numbers */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+
+  /* Near-black canvas — never pure #000 */
+  --color-ink-950: #0a0b0c;
+  --color-ink-900: #121317;
+  --color-ink-850: #16181c;
+  --color-ink-800: #1e2126;
+  --color-ink-700: #2a2e35;
+  --color-ink-600: #3a3f47;
+
+  /* Warm off-white for display text */
+  --color-paper: #faf7f2;
+
+  /* The single accent: emerald (the repo's own), used sparingly */
+  --color-accent: #34d399;
+}
+
+html {
+  background: #0a0b0c;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #0a0b0c;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient glow behind the app — one soft emerald wash, never a particle field */
+.ambient-glow {
+  background:
+    radial-gradient(720px 320px at 50% -8%, rgba(52, 211, 153, 0.09), transparent 70%),
+    radial-gradient(560px 260px at 88% 0%, rgba(52, 211, 153, 0.05), transparent 70%);
+}
+
+/* Refined CRT scanlines — barely there, over the whole app */
+.scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(255, 255, 255, 0.014) 3px,
+    rgba(255, 255, 255, 0.014) 4px
+  );
+}
+
+/* Soft vignette to give the canvas depth */
+.vignette {
+  background: radial-gradient(120% 90% at 50% 0%, transparent 62%, rgba(0, 0, 0, 0.35) 100%);
+}
+
+/* Glass — blur 8–14px, only on floating chrome */
+.glass {
+  background: rgba(10, 11, 12, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Node-graph "bloom" — nodes fade + scale in as the map appears */
+@keyframes bloom-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bloom {
+  animation: bloom-in 0.45s ease-out both;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Section reveal — one calm fade-up, staggered by delay */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: rise-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Terminal cursor */
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  animation: blink 0.9s step-end infinite;
+}
+
+/* Scan progress bar sweep */
+@keyframes scan-sweep {
+  0% {
+    width: 4%;
+  }
+  55% {
+    width: 72%;
+  }
+  100% {
+    width: 96%;
+  }
+}
+
+.scan-bar {
+  animation: scan-sweep 2.6s ease-in-out infinite;
+}
+
+/* Thin dark scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0b0c;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2e35;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3f47;
+}
+
+::selection {
+  background: rgba(52, 211, 153, 0.32);
+  color: #faf7f2;
+}
+
+/* Visible keyboard focus — the accent, never the default outline */
+:focus-visible {
+  outline: 2px solid rgba(52, 211, 153, 0.7);
+  outline-offset: 2px;
+}
+
+/* Motion with purpose only — and none at all when the user asks for it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
